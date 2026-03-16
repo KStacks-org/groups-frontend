@@ -41,6 +41,9 @@ export function SearchResults({ results, isLoading, query }: SearchResultsProps)
 
     return (
         <div className={panelClass}>
+            <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground border-b border-input">
+                Suggested Results
+            </p>
             {visible.map((course) => (
                 <SearchResultsItem key={course.id} course={course} />
             ))}
