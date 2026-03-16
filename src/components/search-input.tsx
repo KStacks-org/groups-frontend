@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { LuSearch } from "react-icons/lu";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -17,7 +17,7 @@ export function SearchInput({ setSearchQuery }: SearchInputProps) {
 
     return (
         <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <LuSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
                 type="text"
                 placeholder="ARAB-101, رياضيات 1, etc."

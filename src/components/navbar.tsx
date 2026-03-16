@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Info, Menu, Home, type LucideIcon } from "lucide-react";
+import { LuInfo, LuMenu, LuHouse } from "react-icons/lu";
+import type { IconType } from "react-icons";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 interface NavLink {
 	href: string;
 	label: string;
-	icon: LucideIcon;
+	icon: IconType;
 	/** Whether this is an internal TanStack Router route */
 	internal?: boolean;
 	/** Whether to show in the desktop nav bar */
@@ -22,8 +23,8 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-	{ href: "/", label: "Home", icon: Home, internal: true, desktop: false },
-	{ href: "/about", label: "About", icon: Info, desktop: true },
+	{ href: "/", label: "Home", icon: LuHouse, internal: true, desktop: false },
+	{ href: "/about", label: "About", icon: LuInfo, desktop: true },
 ];
 
 
@@ -61,7 +62,7 @@ export function Navbar() {
 				<div className="md:hidden">
 					<Sheet open={open} onOpenChange={setOpen}>
 					<SheetTrigger render={<Button variant="outline" size="icon" />}>
-						<Menu className="h-5 w-5" />
+						<LuMenu className="h-5 w-5" />
 						<span className="sr-only">Toggle menu</span>
 					</SheetTrigger>
 						<SheetContent side="right">
