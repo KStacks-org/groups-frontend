@@ -3,16 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 
 import { SearchInput } from "@/components/search-input";
 import { SearchResults } from "@/components/search-results";
+import api from "@/lib/axios";
 
 import type { Course } from "@/types/course";
 
 async function fetchCourses(query: string): Promise<Course[]> {
-	const res = await fetch(
-		`${import.meta.env.VITE_API_URL}/catalog/courses?q=${encodeURIComponent(query)}`,
+	const res = await api.get<{ data: Course[] }>(
+		`/catalog/courses?q=${encodeURIComponent(query)}`,
 	);
-	if (!res.ok) throw new Error("Failed to fetch courses");
-	const json = await res.json();
-	return json.data as Course[];
+	return res.data.data;
 }
 
 export function Search() {
