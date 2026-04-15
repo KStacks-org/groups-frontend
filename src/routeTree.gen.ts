@@ -18,9 +18,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesCourseIdGroupsRoute = CoursesCourseIdGroupsRouteImport.update({
-  id: '/groups',
-  path: '/groups',
-  getParentRoute: () => CoursesCourseIdRoute,
+  id: '/courses/$courseId/groups',
+  path: '/courses/$courseId/groups',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -46,6 +46,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CoursesCourseIdGroupsRoute: typeof CoursesCourseIdGroupsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -59,16 +60,17 @@ declare module '@tanstack/react-router' {
     }
     '/courses/$courseId/groups': {
       id: '/courses/$courseId/groups'
-      path: '/groups'
+      path: '/courses/$courseId/groups'
       fullPath: '/courses/$courseId/groups'
       preLoaderRoute: typeof CoursesCourseIdGroupsRouteImport
-      parentRoute: typeof CoursesCourseIdRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CoursesCourseIdGroupsRoute: CoursesCourseIdGroupsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

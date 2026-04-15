@@ -29,6 +29,8 @@ function CourseGroupsPage() {
                 <p className="text-muted-foreground text-sm">Loading...</p>
             ) : isError ? (
                 <p className="text-destructive text-sm">Failed to load groups.</p>
+            ) : groups.length === 0 ? (
+                <p className="text-muted-foreground text-sm">No groups found.</p>
             ) : (
                 <GroupsTable columns={columns} data={groups} />
             )}
