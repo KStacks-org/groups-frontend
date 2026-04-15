@@ -3,5 +3,11 @@ export interface Course {
     code: string;
     number: string;
     title: string;
-    fullCode: string;
+    fullCode?: string;
+    credits: number;
+}
+
+export interface GetCourseResponse {
+    data: Course;
+    status: string;
 }
