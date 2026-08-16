@@ -80,7 +80,7 @@ function CourseGroupsPage() {
 									{course.fullCode ?? `${course.code} ${course.number}`}
 								</span>
 								<span className="text-xs text-muted-foreground px-2 py-0.5 border border-border rounded-full">
-									{course.credits} cr
+									{course.credits} Credits
 								</span>
 							</div>
 							<h1 className="text-2xl font-bold tracking-tight" dir="rtl">
