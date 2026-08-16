@@ -1,9 +1,11 @@
 import {
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getSortedRowModel,
-    useReactTable,
+    createFilteredRowModel,
+    createSortedRowModel,
+    useTable,
+    tableFeatures,
+    columnFilteringFeature,
+    rowSortingFeature,
+    type RowData,
     type ColumnDef,
     type ColumnFiltersState,
     type SortingState,
@@ -20,24 +22,31 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-interface GroupsTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
+export const features = tableFeatures({
+    columnFilteringFeature,
+    rowSortingFeature,
+    filteredRowModel: createFilteredRowModel(),
+    sortedRowModel: createSortedRowModel(),
+});
+
+export type GroupsTableFeatures = typeof features;
+
+interface GroupsTableProps<TData extends RowData> {
+    columns: ColumnDef<GroupsTableFeatures, TData, any>[];
     data: TData[];
 }
 
-export function GroupsTable<TData, TValue>({
+export function GroupsTable<TData extends RowData>({
     columns,
     data,
-}: GroupsTableProps<TData, TValue>) {
+}: GroupsTableProps<TData>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-    const table = useReactTable({
+    const table = useTable({
+        features,
         data,
         columns,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         state: {
@@ -70,11 +79,7 @@ export function GroupsTable<TData, TValue>({
                                     <TableHead key={header.id}>
                                         {header.isPlaceholder
                                             ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext()
-                                              )}
+                                            : <table.FlexRender header={header} />}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -84,12 +89,9 @@ export function GroupsTable<TData, TValue>({
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map(row => (
                                 <TableRow key={row.id}>
-                                    {row.getVisibleCells().map(cell => (
+                                    {row.getAllCells().map(cell => (
                                         <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+                                            <table.FlexRender cell={cell} />
                                         </TableCell>
                                     ))}
                                 </TableRow>

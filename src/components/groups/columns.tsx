@@ -1,7 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Group } from "@/types/group";
+import type { GroupsTableFeatures } from "./groups-table";
 
-export const columns: ColumnDef<Group>[] = [
+export const columns: ColumnDef<GroupsTableFeatures, Group>[] = [
     {
         accessorKey: "section",
         header: "Section",

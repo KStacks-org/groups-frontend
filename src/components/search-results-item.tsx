@@ -7,7 +7,7 @@ interface SearchResultsItemProps {
 }
 
 export function SearchResultsItem({ course }: SearchResultsItemProps) {
-	const Icon = getCourseIcon(course.fullCode);
+	const Icon = getCourseIcon(course.fullCode ?? "");
 
 	return (
 		<Link
