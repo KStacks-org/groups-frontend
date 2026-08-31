@@ -8,6 +8,7 @@ import type { GetCourseResponse } from "@/types/course";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { LuArrowLeft, LuBookOpen } from "react-icons/lu";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/courses/$courseId/groups")({
 	component: CourseGroupsPage,
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/courses/$courseId/groups")({
 
 function CourseGroupsPage() {
 	const { courseId } = Route.useParams();
+	const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
 	const {
 		data: course,
@@ -36,6 +38,7 @@ function CourseGroupsPage() {
 		isError,
 	} = useQuery({
 		queryKey: ["groups", courseId],
+		enabled: isAuthenticated,
 		queryFn: async () => {
 			const res = await api.get<GetGroupsResponse>(
 				`/groups?courseId=${courseId}`,
@@ -47,6 +50,12 @@ function CourseGroupsPage() {
 	const CourseIcon = course
 		? getCourseIcon(course.fullCode ?? course.code)
 		: LuBookOpen;
+
+	if (isAuthLoading) return null;
+	if (!isAuthenticated) {
+		window.location.replace(`${import.meta.env.VITE_API_URL}/auth/login`);
+		return null;
+	}
 
 	return (
 		<main className="flex-1 flex flex-col px-4 py-8 max-w-5xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
