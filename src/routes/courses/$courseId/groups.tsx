@@ -1,6 +1,7 @@
 import api from "@/lib/axios";
 import { columns } from "@/components/groups/columns";
 import { GroupsTable } from "@/components/groups/groups-table";
+import { AddGroupDialog } from "@/components/groups/add-group-dialog";
 import { getCourseIcon } from "@/lib/course-icons";
 import type { GetGroupsResponse } from "@/types/group";
 import type { GetCourseResponse } from "@/types/course";
@@ -93,9 +94,12 @@ function CourseGroupsPage() {
 
 			{/* Groups section */}
 			<div>
-				<h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-					Available Groups
-				</h2>
+				<div className="mb-4 flex items-center justify-between gap-4">
+					<h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide">
+						Available Groups
+					</h2>
+					<AddGroupDialog courseId={courseId} />
+				</div>
 
 				{isPending ? (
 					<div className="space-y-2">
