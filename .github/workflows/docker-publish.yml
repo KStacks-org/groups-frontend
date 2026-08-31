@@ -91,7 +91,7 @@ jobs:
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
           NEW_IMAGE="ghcr.io/kstacks-org/groups-frontend:master-${SHORT_SHA}"
-          FILE="infra/groups-frontend/deployment.yaml"
+          FILE="infra/apps/groups-frontend/deployment.yaml"
 
           yq -i ".spec.template.spec.containers[0].image = \"${NEW_IMAGE}\"" "$FILE"
 
@@ -104,7 +104,7 @@ jobs:
           cd infra
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add groups-frontend/deployment.yaml
+          git add apps/groups-frontend/deployment.yaml
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore(groups-frontend): bump image to master-${SHORT_SHA}"
           git push
