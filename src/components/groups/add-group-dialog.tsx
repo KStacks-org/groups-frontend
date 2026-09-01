@@ -31,6 +31,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/hooks/useAuth";
 import api from "@/lib/axios";
 import type { GetCourseSectionsResponse } from "@/types/course";
 import type {
@@ -70,7 +71,7 @@ const addGroupSchema = z
 
 type AddGroupValues = z.infer<typeof addGroupSchema>;
 
-const groupTypeItems = [
+const allGroupTypeItems = [
 	{ value: "SECTION", label: "Course section" },
 	{ value: "GENERAL", label: "Both genders" },
 	{ value: "GENERAL_MALE_ONLY", label: "Male only" },
@@ -81,12 +82,24 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 	const [open, setOpen] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const queryClient = useQueryClient();
+	const { user } = useAuth();
+	const gender = user?.gender === "UNKNOWN" ? undefined : user?.gender;
+	const hiddenGeneralType =
+		gender === "MALE"
+			? "GENERAL_FEMALE_ONLY"
+			: gender === "FEMALE"
+				? "GENERAL_MALE_ONLY"
+				: undefined;
+	const groupTypeItems = allGroupTypeItems.filter(
+		(item) => item.value !== hiddenGeneralType,
+	);
 	const { data: sections = [], isPending: isSectionsPending } = useQuery({
-		queryKey: ["courseSections", courseId],
-		enabled: open,
+		queryKey: ["courseSections", courseId, gender],
+		enabled: open && !!user,
 		queryFn: async () => {
 			const response = await api.get<GetCourseSectionsResponse>(
 				`/catalog/courses/${courseId}/sections`,
+				{ params: { gender } },
 			);
 			return response.data.data;
 		},
