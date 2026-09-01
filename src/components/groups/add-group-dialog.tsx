@@ -27,7 +27,6 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -71,6 +70,13 @@ const addGroupSchema = z
 
 type AddGroupValues = z.infer<typeof addGroupSchema>;
 
+const groupTypeItems = [
+	{ value: "SECTION", label: "Course section" },
+	{ value: "GENERAL", label: "Both genders" },
+	{ value: "GENERAL_MALE_ONLY", label: "Male only" },
+	{ value: "GENERAL_FEMALE_ONLY", label: "Female only" },
+] satisfies Array<{ value: AddGroupValues["groupType"]; label: string }>;
+
 export function AddGroupDialog({ courseId }: { courseId: string }) {
 	const [open, setOpen] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
@@ -89,7 +95,7 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 	const form = useForm({
 		defaultValues: {
 			groupLink: "",
-			groupType: "GENERAL" as AddGroupValues["groupType"],
+			groupType: "SECTION" as AddGroupValues["groupType"],
 			sectionId: "",
 		},
 		validators: { onSubmit: addGroupSchema },
@@ -145,37 +151,12 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 					}}
 				>
 					<FieldGroup>
-						<form.Field name="groupLink">
-							{(field) => (
-								<Field data-invalid={field.state.meta.errors.length > 0}>
-									<FieldLabel htmlFor={field.name}>
-										WhatsApp invite link
-									</FieldLabel>
-									<Input
-										id={field.name}
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(event) => field.handleChange(event.target.value)}
-										aria-invalid={field.state.meta.errors.length > 0}
-										placeholder="https://chat.whatsapp.com/..."
-									/>
-									<FieldDescription>
-										Paste the full invite link.
-									</FieldDescription>
-									<FieldError
-										errors={field.state.meta.errors.map((message) => ({
-											message: String(message),
-										}))}
-									/>
-								</Field>
-							)}
-						</form.Field>
-
 						<form.Field name="groupType">
 							{(field) => (
 								<Field>
 									<FieldLabel htmlFor={field.name}>Group type</FieldLabel>
 									<Select
+										items={groupTypeItems}
 										value={field.state.value}
 										onValueChange={(value) =>
 											field.handleChange(value as AddGroupValues["groupType"])
@@ -186,15 +167,11 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 										</SelectTrigger>
 										<SelectContent>
 											<SelectGroup>
-												<SelectLabel>General groups</SelectLabel>
-												<SelectItem value="GENERAL">Both genders</SelectItem>
-												<SelectItem value="GENERAL_MALE_ONLY">
-													Male only
-												</SelectItem>
-												<SelectItem value="GENERAL_FEMALE_ONLY">
-													Female only
-												</SelectItem>
-												<SelectItem value="SECTION">Course section</SelectItem>
+												{groupTypeItems.map((item) => (
+													<SelectItem key={item.value} value={item.value}>
+														{item.label}
+													</SelectItem>
+												))}
 											</SelectGroup>
 										</SelectContent>
 									</Select>
@@ -210,6 +187,10 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 											<Field data-invalid={field.state.meta.errors.length > 0}>
 												<FieldLabel htmlFor={field.name}>Section</FieldLabel>
 												<Select
+													items={sections.map((section) => ({
+														value: section.id,
+														label: `${section.sectionCode}${section.branch ? ` - ${section.branch}` : ""}`,
+													}))}
 													value={field.state.value || null}
 													onValueChange={(value) =>
 														field.handleChange(value ?? "")
@@ -250,6 +231,32 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 								)
 							}
 						</form.Subscribe>
+
+						<form.Field name="groupLink">
+							{(field) => (
+								<Field data-invalid={field.state.meta.errors.length > 0}>
+									<FieldLabel htmlFor={field.name}>
+										WhatsApp invite link
+									</FieldLabel>
+									<Input
+										id={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+										aria-invalid={field.state.meta.errors.length > 0}
+										placeholder="https://chat.whatsapp.com/..."
+									/>
+									<FieldDescription>
+										Paste the full invite link.
+									</FieldDescription>
+									<FieldError
+										errors={field.state.meta.errors.map((message) => ({
+											message: String(message),
+										}))}
+									/>
+								</Field>
+							)}
+						</form.Field>
 					</FieldGroup>
 					{submitError && (
 						<p className="text-sm text-destructive" role="alert">
