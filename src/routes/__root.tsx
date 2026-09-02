@@ -25,11 +25,33 @@ export const Route = createRootRoute({
 			{
 				title: "KAUStack Groups",
 			},
+			{
+				name: "theme-color",
+				content: "#ffffff",
+			},
 		],
 		links: [
 			{
 				rel: "stylesheet",
 				href: appCss,
+			},
+			{
+				rel: "icon",
+				type: "image/svg+xml",
+				href: "/favicon.svg",
+			},
+			{
+				rel: "icon",
+				sizes: "any",
+				href: "/favicon.ico",
+			},
+			{
+				rel: "apple-touch-icon",
+				href: "/apple-touch-icon.png",
+			},
+			{
+				rel: "manifest",
+				href: "/manifest.json",
 			},
 		],
 	}),
