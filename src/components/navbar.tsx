@@ -3,7 +3,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Navbar() {
 	return (
-		<header className="bg-background border-b border-border h-14 px-3 md:px-6 flex justify-between items-center sticky top-0 z-50 shrink-0">
+		<header className="bg-background border-b border-border h-16 px-5 md:px-8 flex justify-between items-center sticky top-0 z-50 shrink-0">
 			{/* --- LEFT SIDE: Logo + wordmark --- */}
 			<Link
 				to="/"
@@ -13,15 +13,15 @@ export function Navbar() {
 					src="/kgroups-light.svg"
 					alt=""
 					aria-hidden="true"
-					className="block dark:hidden h-8 md:h-9 w-auto"
+					className="block dark:hidden h-9 md:h-10 w-auto"
 				/>
 				<img
 					src="/kgroups-dark.svg"
 					alt=""
 					aria-hidden="true"
-					className="hidden dark:block h-8 md:h-9 w-auto"
+					className="hidden dark:block h-9 md:h-10 w-auto"
 				/>
-				<div className="font-bold text-xl md:text-2xl leading-none tracking-tight text-foreground">
+				<div className="font-bold text-2xl md:text-3xl leading-none tracking-tight text-foreground">
 					Groups
 				</div>
 			</Link>

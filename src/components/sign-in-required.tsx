@@ -18,7 +18,7 @@ export function SignInRequired({
 	showBackLink = true,
 }: SignInRequiredProps) {
 	return (
-		<main className="flex min-h-[calc(100dvh-3.5rem)] items-center justify-center px-4 py-12">
+		<main className="flex min-h-[calc(100dvh-4rem)] items-center justify-center px-4 py-12">
 			<div className="w-full max-w-md border border-border bg-card p-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
 				<img
 					src="/kgroups-light.svg"
