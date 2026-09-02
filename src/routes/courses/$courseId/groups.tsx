@@ -1,14 +1,16 @@
-import api from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { LuArrowLeft, LuBookOpen } from "react-icons/lu";
+import { ChooseGender } from "@/components/choose-gender";
+import { AddGroupDialog } from "@/components/groups/add-group-dialog";
 import { columns } from "@/components/groups/columns";
 import { GroupsTable } from "@/components/groups/groups-table";
-import { AddGroupDialog } from "@/components/groups/add-group-dialog";
-import { getCourseIcon } from "@/lib/course-icons";
-import type { GetGroupsResponse } from "@/types/group";
-import type { GetCourseResponse } from "@/types/course";
-import { useQuery } from "@tanstack/react-query";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { LuArrowLeft, LuBookOpen } from "react-icons/lu";
+import { SignInRequired } from "@/components/sign-in-required";
 import { useAuth } from "@/hooks/useAuth";
+import api from "@/lib/axios";
+import { getCourseIcon } from "@/lib/course-icons";
+import type { GetCourseResponse } from "@/types/course";
+import type { GetGroupsResponse } from "@/types/group";
 
 export const Route = createFileRoute("/courses/$courseId/groups")({
 	component: CourseGroupsPage,
@@ -16,7 +18,7 @@ export const Route = createFileRoute("/courses/$courseId/groups")({
 
 function CourseGroupsPage() {
 	const { courseId } = Route.useParams();
-	const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+	const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
 	const {
 		data: course,
@@ -53,9 +55,11 @@ function CourseGroupsPage() {
 
 	if (isAuthLoading) return null;
 	if (!isAuthenticated) {
-		window.location.replace(`${import.meta.env.VITE_API_URL}/auth/login`);
-		return null;
+		return (
+			<SignInRequired description="Course groups are only shared with signed-in students. Sign in through the portal to see the groups for this course." />
+		);
 	}
+	if (user?.gender === "UNKNOWN") return <ChooseGender />;
 
 	return (
 		<main className="flex-1 flex flex-col px-4 py-8 max-w-5xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
