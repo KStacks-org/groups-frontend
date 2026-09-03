@@ -81,6 +81,7 @@ export const columns: ColumnDef<GroupsTableFeatures, Group>[] = [
     {
         accessorKey: "link",
         header: "Group Link",
+        meta: { className: "text-end" },
         cell: ({ row }) => {
             const link = row.getValue<string>("link");
             return (
