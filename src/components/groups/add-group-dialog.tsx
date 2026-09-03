@@ -78,6 +78,17 @@ const allGroupTypeItems = [
 	{ value: "GENERAL_FEMALE_ONLY", label: "Female only" },
 ] satisfies Array<{ value: AddGroupValues["groupType"]; label: string }>;
 
+const groupTypeDescriptions: Record<AddGroupValues["groupType"], string> = {
+	SECTION:
+		"For a specific lecture or lab section. Only students enrolled in that section will typically join.",
+	GENERAL:
+		"A general group open to all students in this course regardless of gender or section — good for announcements or resources.",
+	GENERAL_MALE_ONLY:
+		"A general group for male students only — not tied to any particular section.",
+	GENERAL_FEMALE_ONLY:
+		"A general group for female students only — not tied to any particular section.",
+};
+
 export function AddGroupDialog({ courseId }: { courseId: string }) {
 	const [open, setOpen] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
@@ -188,6 +199,9 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 											</SelectGroup>
 										</SelectContent>
 									</Select>
+									<FieldDescription>
+										{groupTypeDescriptions[field.state.value]}
+									</FieldDescription>
 								</Field>
 							)}
 						</form.Field>
