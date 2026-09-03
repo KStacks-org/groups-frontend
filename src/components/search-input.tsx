@@ -9,7 +9,7 @@ interface SearchInputProps {
 
 export function SearchInput({ setSearchQuery }: SearchInputProps) {
     const [inputValue, setInputValue] = useState("");
-    const debouncedValue = useDebounce(inputValue, 1000);
+    const debouncedValue = useDebounce(inputValue, 500);
 
     useEffect(() => {
         setSearchQuery(debouncedValue);
