@@ -1,4 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { SiWhatsapp } from "react-icons/si";
+import { LuUsers, LuUser } from "react-icons/lu";
+import { buttonVariants } from "@/components/ui/button";
 import type { Group } from "@/types/group";
 import type { GroupsTableFeatures } from "./groups-table";
 
@@ -16,13 +19,38 @@ function GeneralGroupCell({ label, description }: { label: string; description: 
     );
 }
 
+function AudienceCell({ group }: { group: Group }) {
+    if (group.generalGroupMaleAndFemale) {
+        return (
+            <div className="flex items-center gap-1.5">
+                <LuUsers className="size-3.5 text-muted-foreground shrink-0" />
+                <span className="text-xs text-muted-foreground">Both genders</span>
+            </div>
+        );
+    }
+    if (group.generalGroup) {
+        return (
+            <div className="flex items-center gap-1.5">
+                <LuUser className="size-3.5 text-muted-foreground shrink-0" />
+                <span className="text-xs text-muted-foreground">Same gender</span>
+            </div>
+        );
+    }
+    return (
+        <div className="flex items-center gap-1.5">
+            <LuUsers className="size-3.5 text-muted-foreground shrink-0" />
+            <span className="text-xs text-muted-foreground">Section</span>
+        </div>
+    );
+}
+
+
 export const columns: ColumnDef<GroupsTableFeatures, Group>[] = [
     {
         accessorKey: "section",
         header: "Section",
         cell: ({ row }) => {
-            const { section, generalGroup, generalGroupMaleAndFemale } =
-                row.original;
+            const { section, generalGroup, generalGroupMaleAndFemale } = row.original;
             if (generalGroupMaleAndFemale)
                 return (
                     <GeneralGroupCell
@@ -37,8 +65,18 @@ export const columns: ColumnDef<GroupsTableFeatures, Group>[] = [
                         description="Open to all students of the same gender — not tied to a specific section"
                     />
                 );
-            return <span className="text-sm">{section}</span>;
+            return (
+                <span className="font-mono font-semibold text-sm tabular-nums">
+                    {section}
+                </span>
+            );
         },
+    },
+    {
+        id: "audience",
+        header: "Audience",
+        cell: ({ row }) => <AudienceCell group={row.original} />,
+        enableSorting: false,
     },
     {
         accessorKey: "link",
@@ -50,11 +88,14 @@ export const columns: ColumnDef<GroupsTableFeatures, Group>[] = [
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary underline-offset-4 hover:underline"
+                    title="Open WhatsApp group"
+                    className={buttonVariants({ variant: "outline", size: "sm", className: "gap-1.5" })}
                 >
+                    <SiWhatsapp className="size-3.5 text-[#25D366]" />
                     Join Group
                 </a>
             );
         },
+        enableSorting: false,
     },
 ];
