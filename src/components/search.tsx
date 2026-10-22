@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { SearchInput } from "@/components/search-input";
 import { SearchResults } from "@/components/search-results";
@@ -8,9 +8,9 @@ import api from "@/lib/axios";
 import type { Course } from "@/types/course";
 
 async function fetchCourses(query: string): Promise<Course[]> {
-	const res = await api.get<{ data: Course[] }>(
-		`/catalog/courses?q=${encodeURIComponent(query)}`,
-	);
+	const res = await api.get<{ data: Course[] }>("/catalog/courses", {
+		params: { q: query, termCode: import.meta.env.VITE_CATALOG_TERM_CODE },
+	});
 	return res.data.data;
 }
 
@@ -22,7 +22,7 @@ export function Search() {
 		isLoading,
 		isError,
 	} = useQuery({
-		queryKey: ["courses", searchQuery],
+		queryKey: ["courses", import.meta.env.VITE_CATALOG_TERM_CODE, searchQuery],
 		queryFn: () => fetchCourses(searchQuery),
 		enabled: !!searchQuery,
 	});

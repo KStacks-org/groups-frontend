@@ -10,7 +10,9 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 ARG VITE_API_URL
+ARG VITE_CATALOG_TERM_CODE
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_CATALOG_TERM_CODE=${VITE_CATALOG_TERM_CODE}
 RUN pnpm run build
 
 # Stage 2: Production

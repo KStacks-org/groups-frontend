@@ -67,6 +67,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VITE_API_URL=${{ vars.VITE_API_URL }}
+            VITE_CATALOG_TERM_CODE=${{ vars.VITE_CATALOG_TERM_CODE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64

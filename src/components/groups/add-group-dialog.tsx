@@ -105,12 +105,19 @@ export function AddGroupDialog({ courseId }: { courseId: string }) {
 		(item) => item.value !== hiddenGeneralType,
 	);
 	const { data: sections = [], isPending: isSectionsPending } = useQuery({
-		queryKey: ["courseSections", courseId, gender],
+		queryKey: [
+			"courseSections",
+			courseId,
+			import.meta.env.VITE_CATALOG_TERM_CODE,
+			gender,
+		],
 		enabled: open && !!user,
 		queryFn: async () => {
 			const response = await api.get<GetCourseSectionsResponse>(
 				`/catalog/courses/${courseId}/sections`,
-				{ params: { gender } },
+				{
+					params: { gender, termCode: import.meta.env.VITE_CATALOG_TERM_CODE },
+				},
 			);
 			return response.data.data;
 		},
